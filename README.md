@@ -17,6 +17,13 @@ Copyright (c) 2018 Mykhail Uss
 Python Version : 3
 Keras Version: 2.1.2
 Tensorflow-gpu: 1.4.0.
+matplotlib 2.1.1
+rawpy 0.10.1
+exifread 2.1.2
+opencv-python 3.4.0.12
+statsmodels 0.8.0
+tqdm 4.23.4
+xlwt 1.3.0
 
 You'll need to install the dependencies, something like the following:
 
@@ -41,7 +48,7 @@ To perform model testing on NED2012 database for each best checkpoint provide pa
 python main.py train NoiseNet.h5 --train_db path_to_train_db --NED2012_path path_to_NED_2012
 ```
 
-Logs will be automatically saved to "Graph" folder. Notice, that this folder is automaticaaly cleaned at each training run.
+Logs will be automatically saved to "Graph" folder. Notice, that this folder is automatically cleaned at each training run.
 Training resuming is not supported in this release.
 
 ### Testing ###
@@ -60,9 +67,9 @@ The model version directly corresponds to the paper [1]
 
 ## Datasets and pretrained models ##
 
-For model training we use raw 158 images taken by a Nikon D80 camera for which Noise Level Function was preliminary manually estimated using calibration images.
+For model training we use 158 raw images taken by a Nikon D80 camera for which Noise Level Function was preliminary manually estimated using calibration images.
 Estimated NLFs for ISO values 100, 200, 400, 800 and red, greed and blue channels are hardcoded in file utils.py as variables nlf_d80_iso100, nlf_d80_iso200,
-nlf_d80_iso400, and nlf_d80_iso800. To train the model using raw images from some other camera, calibrated NLFs should be provided in sililar manner.
+nlf_d80_iso400, and nlf_d80_iso800. To train the model using raw images from some other camera, calibrated NLFs should be provided in similar manner.
 Also notice, that bayer pattern for Nikon D80 camera is hardcoded as well.
 
 The training dataset can be downloaded here
@@ -77,7 +84,7 @@ NoiseNet evaluation is based on NED2012 image database (M. L. Uss, B. Vozel, V. 
 We provide model NoiseNet_v29.h5 trained on the `D80_158' dataset from the ACIVS paper in the "PretrainedModel" folder of this repository.
 
 
-### Constraines ###
+### constraints ###
 
 NoiseNet CNN is designed to estimate spatially uncorrelated additive noise STD from local image patch of size 32 by 32 pixels
 NI+NoiseNet BNPE method implementation is only tested for Nikon D80 images. For other raw images, especially with different Bayer pattern, code modifications are needed.

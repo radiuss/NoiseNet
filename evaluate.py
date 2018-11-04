@@ -17,10 +17,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import sqrt
 from nlf_estimation import NoiseEstimator, NoiseModel
-from utils import calc_noise_nlf, prepare_patch
+from utils import calc_noise_nlf, prepare_patch, VALID_RAW_FORMATS
 import xlwt
 import time
 from tqdm import trange
+import re
+import fnmatch
 
 
 class Evaluator:
@@ -28,13 +30,13 @@ class Evaluator:
 
     """
 
-    def __init__(self, model, sigma_rel_th, verbose=0, stats_path=None):
+    def __init__(self, model, sigma_rel_th, verbose=0, out_dir=None):
         self.model = model
         # self.patch_size = int(self.model.get_layer("input_1").get_output_at(0).get_shape()[2])  # get input patch size
         self.patch_size = 32
         self.sigma_rel_th = sigma_rel_th
         self.verbose = verbose
-        self.stats_path = stats_path
+        self.out_dir = out_dir
         self.sd_nlf_error_noisenet = None
         self.sd_nlf_error_nidct = None
 
@@ -64,7 +66,7 @@ class Evaluator:
         else:
             print("Results for NI+DCT are not available")
 
-    def process_NED2012(self, path_ds):
+    def process_NED2012(self, path_db):
         """ Collect stats for NED2012 database
             Noise NLF is stored as (2, 3, ?) array
             axis=0 stores NLF coefficients
@@ -73,19 +75,19 @@ class Evaluator:
             axis=1 is image channels (red, green, blue)
             axis=2 is database images
 
-        :param path_ds: path to the NED2012 database
+        :param path_db: path to the NED2012 database
         """
 
         # scan dataset for .nef or .dng images
-        types = ('*.nef', '*.dng')
         all_img_paths = []
-        for files in types:
-            all_img_paths.extend(glob.glob(os.path.join(path_ds, files)))
+        for files in VALID_RAW_FORMATS:
+            rule = re.compile(fnmatch.translate(files), re.IGNORECASE)
+            all_img_paths += [os.path.join(path_db, name) for name in os.listdir(path_db) if rule.match(name)]
         # read ISO value for each image
         n_images = len(all_img_paths)
-        if n_images==0:
+        if n_images == 0:
             return
-        path_aux_data = os.path.join(path_ds, 'NED2012_Auxiliary.mat')
+        path_aux_data = os.path.join(path_db, 'NED2012_Auxiliary.mat')
         if not os.path.exists(path_aux_data):
             print("No auxiliary data found in the path provided for NED2012 database. Aborting evaluation.")
             return
@@ -153,7 +155,7 @@ class Evaluator:
                   % (100. * sd_nlf_error[0], 100. * sd_nlf_error[1]))
 
         # save results
-        if self.stats_path is not None:
+        if self.out_dir is not None:
             wb = xlwt.Workbook()
             ws = wb.add_sheet(self.model.name)
 
@@ -172,10 +174,11 @@ class Evaluator:
                 ws.write(3, i + 1, err_NINoiseNet[1, i])
                 ws.write(4, i + 1, err_NIDCT[1, i])
 
-            wb.save(self.stats_path)
+            stats_path = os.path.join(self.out_dir, self.model.name+"_stats.xls")
+            wb.save(stats_path)
 
             if self.verbose == 1:
-                print("Evaluation results saved to %s" % self.stats_path)
+                print("Evaluation results saved to %s" % stats_path)
 
     @staticmethod
     def __normalize_to_iso100(nlf, iso):
@@ -334,4 +337,8 @@ class Evaluator:
         plt.xlabel("Noise SD estimates SD prediction by NoiseNet")
         plt.ylabel("Probability density")
         plt.legend()
-        plt.show()
+        stats_path = os.path.join(self.out_dir, self.model.name + "_stats_pure_noise.png")
+        plt.savefig(stats_path, dpi=300)
+        if self.verbose == 1:
+            print("Evaluation results for pure noise saved to %s" % stats_path)
+        plt.close()

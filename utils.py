@@ -16,6 +16,9 @@ import cv2
 import numpy as np
 from tqdm import trange
 import time
+import re
+import fnmatch
+
 
 # Nikon D80 calibration nlf for ISO = 100, 200, 400, 800
 nlf_d80_iso100 = np.array([[8.42733e-06, 0.142803, 8.0322],
@@ -31,6 +34,7 @@ nlf_d80_iso800 = np.array([[-7.28926e-06, 1.1409160, 223.40250],
                            [-5.743534e-06, 1.0208800, 223.47100],
                            [1.721961e-05, 1.2756660, 293.2322]])
 
+VALID_RAW_FORMATS = ('*.nef', '*.dng')
 
 def calc_noise_nlf(iso):
     """ calculate noise nlf for fiven iso value by
@@ -82,10 +86,10 @@ def collect_train_data(path_db, patch_size):
     labels = []
     intensity_max = 3800
 
-    types = ('*.nef', '*.dng')
     all_img_paths = []
-    for files in types:
-        all_img_paths.extend(glob.glob(os.path.join(path_db, files)))
+    for files in VALID_RAW_FORMATS:
+        rule = re.compile(fnmatch.translate(files), re.IGNORECASE)
+        all_img_paths += [os.path.join(path_db, name) for name in os.listdir(path_db) if rule.match(name)]
     n_images = len(all_img_paths)
 
     n_used_images = 0

@@ -169,8 +169,8 @@ if __name__ == "__main__":
             print("Failed to load model %s" % model_path)
             sys.exit(0)
 
-        stats_path = model_path + '_stats.xls'
-        ev = Evaluator(netBNPE, SIGMA_REL_TH, 1, stats_path)
+        our_dir = os.path.dirname(model_path)
+        ev = Evaluator(netBNPE, SIGMA_REL_TH, 1, our_dir)
         # perform test on pure gaussian noise
         ev.pure_noise_test()
         if args.NED2012_path is None:

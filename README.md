@@ -4,7 +4,7 @@ Implements the model described in:
 
     [1] Uss M., Vozel B., Lukin V., Chehdi K. (2018) NoiseNet: Signal-Dependent Noise Variance Estimation with Convolutional Neural Network. In: Blanc-Talon J., Helbert D., Philips W., Popescu D., Scheunders P. (eds) Advanced Concepts for Intelligent Vision Systems. ACIVS 2018. Lecture Notes in Computer Science, vol 11182. Springer, Cham
 
-The published version can be found [here](http://link-springer-com-443.webvpn.jxutcm.edu.cn/chapter/10.1007/978-3-030-01449-0_35).
+The published version can be found [here](https://link.springer.com/chapter/10.1007/978-3-030-01449-0_35).
 
 If you use this code please cite [1].
 

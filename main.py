@@ -61,6 +61,7 @@ class NED2012Callback(Callback):
             logs["NED2012 SD component error"] = np.array(sd_SD, dtype="float64")
             logs["NED2012 SI component error"] = np.array(sd_SI, dtype="float64")
 
+
 class TrainValTensorBoard(TensorBoard):
     def __init__(self, log_dir='./logs', **kwargs):
         # Make the original `TensorBoard` log to a subdirectory 'training'
@@ -160,10 +161,7 @@ if __name__ == "__main__":
         print("NoiseNet evaluation mode.")
         print("Evaluating model %s" % model_path)
         try:
-            netBNPE = load_model(model_path, custom_objects={"SIGMA_EPSILON": SIGMA_EPSILON, "test_loss": u_l2,
-                                                             "u_l2": u_l2, "m_uncert": m_uncert,
-                                                             "bias": bias, "err_rel": err_rel,
-                                                             "err_norm_sd": err_norm_sd})
+            netBNPE = load_model(model_path, compile=False, custom_objects={"SIGMA_EPSILON": SIGMA_EPSILON})
             print("Model %s successfully loaded" % model_path)
         except:
             print("Failed to load model %s" % model_path)

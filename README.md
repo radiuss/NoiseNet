@@ -14,21 +14,12 @@ Copyright (c) 2018 Mykhail Uss
 
 ### Setting the environment ###
 
-Python Version : 3
-Keras Version: 2.1.2
-Tensorflow-gpu: 1.4.0.
-matplotlib 2.1.1
-rawpy 0.10.1
-exifread 2.1.2
-opencv-python 3.4.0.12
-statsmodels 0.8.0
-tqdm 4.23.4
-xlwt 1.3.0
+Python Version : 3.5.4
 
-You'll need to install the dependencies, something like the following:
+You'll need to install the dependencies from requirements.txt file, something like the following:
 
 ```
-pip install numpy keras tensorflow-gpu scipy matplotlib
+pip install -r requirements.txt
 ```
 
 ### Training ###
@@ -56,7 +47,7 @@ Training resuming is not supported in this release.
 For testing model on NED2012 database, specify eval key, and provide model location and path to the NED2012 database.
 
 ```
-python main.py eval PretrainedModel/NoiseNet_v29.h5 --NED2012_path path_to_NED_2012
+python main.py eval PretrainedModel/NoiseNet_v30.h5 --NED2012_path path_to_NED_2012
 ```
 
 Note: If model path for evaluation is not provided, the pretrained model is used by default.
@@ -81,7 +72,7 @@ NoiseNet evaluation is based on NED2012 image database (M. L. Uss, B. Vozel, V. 
 * [NED2012 database for evaluation](https://www.researchgate.net/publication/280611662_NED2012_image_database_for_benchmarking_signal-dependent_noise_estimation_algorithms)
 
 
-We provide model NoiseNet_v29.h5 trained on the `D80_158' dataset from the ACIVS paper in the "PretrainedModel" folder of this repository.
+We provide model NoiseNet_v30.h5 trained on the `D80_158' dataset from the ACIVS paper in the "PretrainedModel" folder of this repository.
 
 
 ### constraints ###

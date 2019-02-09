@@ -8,7 +8,6 @@ __email__ = "mykhail.uss@gmail.com", "uss@xai.edu.ua"
 __status__ = "Prototype"
 
 import os
-import glob
 import scipy.io
 from scipy.stats import norm
 import rawpy

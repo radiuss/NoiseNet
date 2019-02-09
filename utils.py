@@ -10,7 +10,6 @@ __status__ = "Prototype"
 import rawpy
 import exifread
 import os
-import glob
 from math import sqrt
 import cv2
 import numpy as np
